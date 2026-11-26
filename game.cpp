@@ -79,3 +79,47 @@ void munculkanMusuh() {
         }
     }
 }
+while (nyawa > 0) {
+        int delay = 120 - skor * 2;
+        if (delay < 40) delay = 40;
+        timeout(delay);
+        int ch = getch();
+
+        if (ch == KEY_LEFT && px > 1) px--;
+        else if (ch == KEY_RIGHT && px < 15) px++;
+        else if (ch == 'q') break;
+
+        if (rand() % 3 == 0) {
+            int i = rand() % 5;
+            if (ey[i] == -1) {
+                ex[i] = 1 + rand() % 15;
+                ey[i] = 0;
+            }
+        }
+
+        clear();
+        frame++;
+
+        for (int y = 0; y < 20; y++) {
+            mvaddch(y, 0, '|');
+            mvaddch(y, 16, '|');
+            if ((y + frame) % 4 < 2) mvaddch(y, 8, '.');
+        }
+
+        for (int i = 0; i < 5; i++) {
+            if (ey[i] == -1) continue;
+            ey[i]++;
+
+            if (ey[i] == 18 && ex[i] == px) {
+                nyawa--;
+                ey[i] = -1;
+                beep();
+            } else if (ey[i] > 19) {
+                ey[i] = -1;
+                skor++;
+            } else {
+                attron(COLOR_PAIR(2));
+                mvaddch(ey[i], ex[i], 'V');
+                attroff(COLOR_PAIR(2));
+            }
+        }
