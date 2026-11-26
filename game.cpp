@@ -123,3 +123,51 @@ while (nyawa > 0) {
                 attroff(COLOR_PAIR(2));
             }
         }
+void jalankanGame() {
+    while (nyawa > 0) {
+        prosesKontrolPemain();
+
+        if (nyawa <= 0) {
+            break;
+        }
+
+        munculkanMusuh();
+        gambarJalan();
+        prosesMusuh();
+        gambarPemain();
+        tampilkanInformasi();
+    }
+}
+
+void simpanRekor() {
+    if (skor > rekor) {
+        ofstream tulis("skor.txt");
+
+        if (tulis.is_open()) {
+            tulis << skor;
+            tulis.close();
+        }
+    }
+}
+
+void tampilkanGameOver() {
+    clear();
+
+    mvprintw(8, 5, "GAME OVER");
+    mvprintw(10, 5, "Skor kamu: %d", skor);
+    mvprintw(12, 5, "Tekan tombol apa saja...");
+
+    refresh();
+    timeout(-1);
+    getch();
+    endwin();
+}
+
+int main() {
+    inisialisasiGame();
+    jalankanGame();
+    simpanRekor();
+    tampilkanGameOver();
+
+    return 0;
+}
